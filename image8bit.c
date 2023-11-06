@@ -338,7 +338,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 
 /// Pixel get & set operations
 
-/// These are the primitive operations to access and modify a single pixel
+/// ccess and modThese are the primitive operations to aify a single pixel
 /// in the image.
 /// These are very simple, but fundamental operations, which may be used to 
 /// implement more complex operations.
@@ -349,6 +349,9 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 static inline int G(Image img, int x, int y) {
   int index;
   // Insert your code here!
+  char str[6];
+  sprintf(str, "%d%d", y, x);
+  index = atoi(str);
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
