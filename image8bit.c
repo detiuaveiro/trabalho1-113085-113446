@@ -10,11 +10,11 @@
 /// 2013, 2023
 
 // Student authors (fill in below):
-// NMec:  Name:
+// NMec: 113085  Name: Simão Almeida <spsa@ua.pt>
+// NMec: 
 // 
 // 
-// 
-// Date:
+// Date: 06/11/2023
 //
 
 #include "image8bit.h"
@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "instrumentation.h"
 
 // The data structure
@@ -172,6 +173,24 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
   // Insert your code here!
+  Image img = (Image)malloc(sizeof(struct image));      //Allocate memory for the image
+  if(img == NULL){                                            //If allocation fails, 
+    errCause = "Failed to allocate mhe maximum gray level (corresponding to white)emory.";                  
+    return NULL;                                              //return null
+  }
+
+  img->width=width;
+  img->height=height;
+  img->maxval=maxval;
+  img->pixel=(uint8*)malloc(width*height*sizeof(uint8));    //Alocate memory for the pixel positions
+  if(img->pixel == NULL){                                         //If it fails                                     
+    errCause = "Failed to allocate img->pixel";
+    free(img);                                               //free the space used to img
+    return NULL;                                                  //return null;
+  }
+
+  memset(img->pixel,0,width*height*sizeof(uint8));
+  return img;
 }
 
 /// Destroy the image pointed to by (*imgp).
@@ -179,10 +198,19 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 /// If (*imgp)==NULL, no operation is performed.
 /// Ensures: (*imgp)==NULL.
 /// Should never fail, and should preserve global errno/errCause.
-void ImageDestroy(Image* imgp) { ///
-  assert (imgp != NULL);
-  // Insert your code here!
+void ImageDestroy(Image* imgp) {
+    assert(imgp != NULL);
+    //Write your code here!
+    Image img = *imgp; // dereference the pointer to get the actual Image struct pointer
+
+    if (img != NULL) {
+        free(img->pixel); // free the pixel array
+        img->pixel = NULL; // set to NULL to avoid dangling pointer
+        free(img); // free the Image struct
+        *imgp = NULL; // set the Image pointer to NULL
+    }
 }
+
 
 
 /// PGM file operations
