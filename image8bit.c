@@ -398,6 +398,11 @@ void ImageSetPixel(Image img, int x, int y, uint8 level) { ///
 void ImageNegative(Image img) { ///
   assert (img != NULL);
   // Insert your code here!
+  for(int i = 0; i < img->width;i++){
+    for(int j = 0; j < img->height;j++){
+      img->pixel[G(img, i, j)] = img->maxval - img->pixel[G(img, i, j)];
+    }
+  }
 }
 
 /// Apply threshold to image.
