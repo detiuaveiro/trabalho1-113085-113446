@@ -10,19 +10,11 @@
 /// 2013, 2023
 
 // Student authors (fill in below):
-<<<<<<< HEAD
 // NMec: 113085  Name: Simão Almeida <spsa@ua.pt>
 // NMec: 
 // 
 // 
 // Date: 06/11/2023
-=======
-// NMec:  Name:
-// 
-// 
-// 
-// Date:
->>>>>>> upstream/main
 //
 
 #include "image8bit.h"
@@ -32,10 +24,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
-#include <string.h>
-=======
->>>>>>> upstream/main
 #include "instrumentation.h"
 
 // The data structure
@@ -184,7 +172,6 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
   // Insert your code here!
-<<<<<<< HEAD
   Image img = (Image)malloc(sizeof(struct image));      //Allocate memory for the image
   if(img == NULL){                                            //If allocation fails, 
     errCause = "Failed to allocate mhe maximum gray level (corresponding to white)emory.";                  
@@ -203,8 +190,6 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 
   memset(img->pixel,0,width*height*sizeof(uint8));
   return img;
-=======
->>>>>>> upstream/main
 }
 
 /// Destroy the image pointed to by (*imgp).
@@ -212,7 +197,6 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 /// If (*imgp)==NULL, no operation is performed.
 /// Ensures: (*imgp)==NULL.
 /// Should never fail, and should preserve global errno/errCause.
-<<<<<<< HEAD
 void ImageDestroy(Image* imgp) {
     assert(imgp != NULL);
     //Write your code here!
@@ -228,14 +212,6 @@ void ImageDestroy(Image* imgp) {
 
 
 
-=======
-void ImageDestroy(Image* imgp) { ///
-  assert (imgp != NULL);
-  // Insert your code here!
-}
-
-
->>>>>>> upstream/main
 /// PGM file operations
 
 // See also:
@@ -361,11 +337,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 
 /// Pixel get & set operations
 
-<<<<<<< HEAD
-/// ccess and modThese are the primitive operations to aify a single pixel
-=======
 /// These are the primitive operations to access and modify a single pixel
->>>>>>> upstream/main
 /// in the image.
 /// These are very simple, but fundamental operations, which may be used to 
 /// implement more complex operations.
@@ -376,12 +348,9 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 static inline int G(Image img, int x, int y) {
   int index;
   // Insert your code here!
-<<<<<<< HEAD
   char str[6];  
   sprintf(str, "%d%d", y, x);
   index = atoi(str);
-=======
->>>>>>> upstream/main
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
@@ -453,11 +422,7 @@ void ImageBrighten(Image img, double factor) { ///
 
 /// Rotate an image.
 /// Returns a rotated version of the image.
-<<<<<<< HEAD
-/// The rotation is 90 degrees clockwise.
-=======
 /// The rotation is 90 degrees anti-clockwise.
->>>>>>> upstream/main
 /// Ensures: The original img is not modified.
 /// 
 /// On success, a new image is returned.
