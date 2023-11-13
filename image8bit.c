@@ -467,13 +467,17 @@ void ImageBrighten(Image img, double factor) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageRotate(Image img) { ///
   assert (img != NULL);
-  Image newImg = ImageCreate(img->height, img->width, 255);
-  for(int i = 0; i < img->width;i++){
-    for(int j = 0; j < img->height;i++){
-      ImageSetPixel(newImg, img->width-j, i, ImageGetPixel(img, i, j));
-    }
+  Image newImg = ImageCreate(img->height, img->width, 255);                     //Creates a new image with width = img height and height = img width
+  if(newImg == NULL){
+    errCause = ("Error creating the new image.");
+    return NULL;
   }
-  return newImg;
+  for(int i = 0; i < img->width;i++){                                                                 //for x in img
+    for(int j = 0; j < img->height;i++){                                                              //for y in img
+      ImageSetPixel(newImg, img->width-j, i, ImageGetPixel(img, i, j));          //newImg(x, y) = img( img_width-y, x), this rotates
+    }                                                                                                 //the img anti-clockwise
+  }
+  return newImg;                                                                                      //returns the image
 }
 
 /// Mirror an image = flip left-right.
@@ -486,6 +490,17 @@ Image ImageRotate(Image img) { ///
 Image ImageMirror(Image img) { ///
   assert (img != NULL);
   // Insert your code here!
+  Image newImg = ImageCreate(img->width, img->height, 255);     //creates a new image with the same dimensions than img
+  if(newImg == NULL){                                                                 //if img = NULL
+    errCause = "Error creating the newImage";                                         //set errCause
+    return NULL;                                                                      //return null
+  }
+  for(int i = 0; i < img->width; i++){
+    for(int j = 0; j < img ->height; j++){
+      ImageSetPixel(newImg, i, img->height-j, ImageGetPixel(img, img->width, img->height));
+    }
+  }
+  return newImg;
 }
 
 /// Crop a rectangular subimage from img.
