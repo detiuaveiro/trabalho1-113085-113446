@@ -347,6 +347,7 @@ int ImageValidPos(Image img, int x, int y) { ///
 int ImageValidRect(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   // Insert your code here!
+  return(w < x && h < y);
 }
 
 /// Pixel get & set operations
