@@ -400,7 +400,7 @@ void ImageNegative(Image img) { ///
   // Insert your code here!
   for(int i = 0; i < img->width;i++){
     for(int j = 0; j < img->height;j++){
-      ImageSetPixel(img, i, j, img->maxval-img->pixel[G(img, i, j)]);
+      ImageSetPixel(img, i, j, img->maxval-ImageGetPixel(img, i, j));
     }
   }
 }
@@ -429,7 +429,17 @@ void ImageThreshold(Image img, uint8 thr) { ///
 void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
   // ? assert (factor >= 0.0);
+  assert(factor >= 0.0);
   // Insert your code here!
+  for(int i = 0; i < img->width;i++){
+    for(int j = 0; j < img->height; j++){
+      int level = ImageGetPixel(img, i, j);
+      if(level > 255){
+        level = 255;
+      }
+      ImageSetPixel(img, i, j, level);
+    }
+  }
 }
 
 
