@@ -400,7 +400,7 @@ void ImageNegative(Image img) { ///
   // Insert your code here!
   for(int i = 0; i < img->width;i++){
     for(int j = 0; j < img->height;j++){
-      img->pixel[G(img, i, j)] = img->maxval - img->pixel[G(img, i, j)];
+      ImageSetPixel(img, i, j, img->maxval-img->pixel[G(img, i, j)]);
     }
   }
 }
@@ -410,7 +410,16 @@ void ImageNegative(Image img) { ///
 /// all pixels with level>=thr to white (maxval).
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
-  // Insert your code here!
+  for(int i = 0; i < img->width; i++){
+    for(int j = 0; j < img->height; j++){
+      if(i < thr || j < thr){
+        ImageSetPixel(img, i, j, 0);
+      }
+      else {
+        ImageSetPixel(img, i, j, img->maxval);
+      }
+    }
+  }
 }
 
 /// Brighten image by a factor.
