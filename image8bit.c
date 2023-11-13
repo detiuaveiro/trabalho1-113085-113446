@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "instrumentation.h"
 
 // The data structure
@@ -174,7 +175,7 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   // Insert your code here!
   Image img = (Image)malloc(sizeof(struct image));      //Allocate memory for the image
   if(img == NULL){                                            //If allocation fails, 
-    errCause = "Failed to allocate mhe maximum gray level (corresponding to white)emory.";                  
+    errCause = "Failed to allocate the memory for the image.";                  
     return NULL;                                              //return null
   }
 
@@ -188,7 +189,7 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
     return NULL;                                                  //return null;
   }
 
-  memset(img->pixel,0,width*height*sizeof(uint8));
+  memset(img->pixel,0,width*height*sizeof(uint8));        //sets pixel color to black
   return img;
 }
 
@@ -200,12 +201,12 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 void ImageDestroy(Image* imgp) {
     assert(imgp != NULL);
     //Write your code here!
-    Image img = *imgp; // dereference the pointer to get the actual Image struct pointer
+    Image img = *imgp;                                           // dereference the pointer to get the actual image struct pointer
 
     if (img != NULL) {
-        free(img->pixel); // free the pixel array
-        img->pixel = NULL; // set to NULL to avoid dangling pointer
-        free(img); // free the Image struct
+        free(img->pixel);                                    //free the pixel array
+        img->pixel = NULL;                                        //set to NULL to avoid dangling pointer
+        free(img);                                           //free the Image struct
         *imgp = NULL; // set the Image pointer to NULL
     }
 }
@@ -348,9 +349,6 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 static inline int G(Image img, int x, int y) {
   int index;
   // Insert your code here!
-  char str[6];  
-  sprintf(str, "%d%d", y, x);
-  index = atoi(str);
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
