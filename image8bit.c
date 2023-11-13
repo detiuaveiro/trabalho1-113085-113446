@@ -495,9 +495,9 @@ Image ImageMirror(Image img) { ///
     errCause = "Error creating the newImage";                                         //set errCause
     return NULL;                                                                      //return null
   }
-  for(int i = 0; i < img->width; i++){
-    for(int j = 0; j < img ->height; j++){
-      ImageSetPixel(newImg, i, img->height-j, ImageGetPixel(img, img->width, img->height));
+  for(int i = 0; i < img->width; i++){                                                //for x in img
+    for(int j = 0; j < img ->height; j++){                                            //for y in img
+      ImageSetPixel(newImg, i, img->height-j, ImageGetPixel(img, img->width, img->height)); //newImg(x,y)=img(x, img->heigth)
     }
   }
   return newImg;
