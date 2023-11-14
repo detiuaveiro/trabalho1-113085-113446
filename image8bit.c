@@ -581,8 +581,12 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img2 != NULL);
   assert (ImageValidPos(img1, x, y));
   // Insert your code here!
-  for(int i = 0; i < img1->width-img2->width){
-    for(int j = 0)
+  for(int i = 0; i < img1->width-img2->width; i++){
+    for(int j = 0; j<img1->height-img2->height; j++){
+      if(img1->pixel == img2->pixel){
+        while
+      }
+    }
   }
 }
 
