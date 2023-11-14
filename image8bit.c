@@ -558,6 +558,19 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
   // Insert your code here!
+  if(alpha > 1.0){
+    alpha = 1.0;
+  }
+  if(alpha < 0.0){
+    alpha = 0.0;
+  }
+  double blur = 0;
+  for(int i = 0; i < img2->width; i++){
+    for(int j = 0; j < img2->height; j++){
+      blur = ImageGetPixel(img2, i, j)*blur + ImageGetPixel(img1, i, j)*(1-blur);
+      ImageSetPixel(img1, x + i, y+j, blur);
+    }
+  }
 }
 
 /// Compare an image to a subimage of a larger image.
@@ -568,6 +581,9 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img2 != NULL);
   assert (ImageValidPos(img1, x, y));
   // Insert your code here!
+  for(int i = 0; i < img1->width-img2->width){
+    for(int j = 0)
+  }
 }
 
 /// Locate a subimage inside another image.
