@@ -521,9 +521,9 @@ Image ImageCrop(Image img, int x, int y, int w, int h) { ///
   assert (ImageValidRect(img, x, y, w, h));
   // Insert your code here!
   Image newImg = ImageCreate(w, h, 255);
-  for(int i = x; i <= x + w; i++){
-    for(int j = y; j <= j + h; j++){
-      ImageSetPixel(newImg, i, j, ImageGetPixel(img, i, j));
+  for(int i = x; i < x + w; i++){
+    for(int j = y; j < y + h; j++){
+      ImageSetPixel(newImg, i-x, j-y, ImageGetPixel(img, i, j));
     }
   }
   return newImg;
