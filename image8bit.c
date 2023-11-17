@@ -600,12 +600,25 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 /// Searches for img2 inside img1.
 /// If a match is found, returns 1 and matching position is set in vars (*px, *py).
 /// If no match is found, returns 0 and (*px, *py) are left untouched.
-int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
-  assert (img1 != NULL);
-  assert (img2 != NULL);
-  // Insert your code here!
+int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
+    assert(img1 != NULL);
+    assert(img2 != NULL);
+    for (int i = 0; i <= img1->width - img2->width; i++) {      // Iterate through all possible positions to find a match
+        for (int j = 0; j <= img1->height - img2->height; j++) {
+            if (ImageMatchSubImage(img1, i, j, img2)) {    // Check if img2 matches the subimage of img1 at position (i, j)
+                // Set the position of the match
+                if (px != NULL) {
+                    *px = i;
+                }
+                if (py != NULL) {
+                    *py = j;
+                }
+                return 1; //subimage located
+            }
+        }
+    }
+    return 0; // No subimage located
 }
-
 
 /// Filtering
 
