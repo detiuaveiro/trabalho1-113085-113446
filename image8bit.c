@@ -520,10 +520,10 @@ Image ImageCrop(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   assert (ImageValidRect(img, x, y, w, h));
   // Insert your code here!
-  Image newImg = ImageCreate(w, h, 255);
+  Image newImg = ImageCreate(w, h, 255);  //creates a new image
   for(int i = x; i < x + w; i++){
-    for(int j = y; j < y + h; j++){
-      ImageSetPixel(newImg, i-x, j-y, ImageGetPixel(img, i, j));
+    for(int j = y; j < y + h; j++){ //Iterates through all possible pixels
+      ImageSetPixel(newImg, i-x, j-y, ImageGetPixel(img, i, j));  //Sets all the pixels in the image
     }
   }
   return newImg;
@@ -557,19 +557,21 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
 void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
-  assert (ImageValidRect(img1, x, y, img2->width, img2->height));
+  assert (ImageValidRect(img1, x, y, img2->width, img2->height)); //checks if img2 fits into img1
   // Insert your code here!
   if(alpha > 1.0){
-    alpha = 1.0;
+    alpha = 1.0;  //saturates alpha
   }
   if(alpha < 0.0){
-    alpha = 0.0;
+    alpha = 0.0;  //saturates alpha
   }
-  double blur = 0;
   for(int i = 0; i < img2->width; i++){
-    for(int j = 0; j < img2->height; j++){
-      blur = ImageGetPixel(img2, i, j)*blur + ImageGetPixel(img1, i, j)*(1-blur);
-      ImageSetPixel(img1, x + i, y+j, blur);
+    for(int j = 0; j < img2->height; j++){  //Iterates every pixel
+      int newPixel = ImageGetPixel(img2, i, j)*(alpha) + ImageGetPixel(img1, i+x, j+y)*(1-alpha);
+      if(newPixel > img2->maxval){
+        newPixel = img2->maxval;
+      }
+      ImageSetPixel(img1, x + i, y+j, newPixel);
     }
   }
 }
