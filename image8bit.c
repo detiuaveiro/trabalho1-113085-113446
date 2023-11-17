@@ -400,8 +400,8 @@ void ImageNegative(Image img) { ///
   assert (img != NULL);
   // Insert your code here!
   for(int i = 0; i < img->width;i++){
-    for(int j = 0; j < img->height;j++){
-      ImageSetPixel(img, i, j, img->maxval-ImageGetPixel(img, i, j));
+    for(int j = 0; j < img->height;j++){       
+      ImageSetPixel(img, i, j, img->maxval-ImageGetPixel(img, i, j));   //img->pixel = img->maxval - img->pixel
     }
   }
 }
@@ -412,12 +412,12 @@ void ImageNegative(Image img) { ///
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
   for(int i = 0; i < img->width; i++){
-    for(int j = 0; j < img->height; j++){
-      if(ImageGetPixel(img, i, j) < thr){
-        ImageSetPixel(img, i, j, 0);
+    for(int j = 0; j < img->height; j++){          //Iterate through all possible pixels
+      if(ImageGetPixel(img, i, j) < thr){         //if img->pixel < thr
+        ImageSetPixel(img, i, j, 0);            //img->pixel = 0 (black)
       }
       else {
-        ImageSetPixel(img, i, j, img->maxval);
+        ImageSetPixel(img, i, j, img->maxval); //else img->pixel = maxval (white)
       }
     }
   }
@@ -433,10 +433,10 @@ void ImageBrighten(Image img, double factor) { ///
   assert(factor >= 0.0);
   // Insert your code here!
   for(int i = 0; i < img->width;i++){
-    for(int j = 0; j < img->height; j++){
-      int level = ImageGetPixel(img, i, j);
-      if(level > 255){
-        level = 255;
+    for(int j = 0; j < img->height; j++){ //Iterate through all posible pixels
+      int level = ImageGetPixel(img, i, j) * factor; //img->pixel = img->pixel * factor
+      if(level > img->maxval){
+        level = img->maxval; //saturate at maxval                
       }
       ImageSetPixel(img, i, j, level);
     }
