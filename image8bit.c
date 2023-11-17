@@ -432,13 +432,14 @@ void ImageBrighten(Image img, double factor) { ///
   // ? assert (factor >= 0.0);
   assert(factor >= 0.0);
   // Insert your code here!
+  double level = 0;
   for(int i = 0; i < img->width;i++){
     for(int j = 0; j < img->height; j++){ //Iterate through all posible pixels
-      double level = ImageGetPixel(img, i, j) * factor; //img->pixel = img->pixel * factor
+      level = ImageGetPixel(img, i, j) * factor; //level = img->pixel * factor
       if(level > img->maxval){
         level = img->maxval; //saturate at maxval                
       }
-      ImageSetPixel(img, i, j, level);
+      ImageSetPixel(img, i, j, level); //img->pixel = level
     }
   }
 }
