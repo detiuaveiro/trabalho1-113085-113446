@@ -475,7 +475,7 @@ Image ImageRotate(Image img) { ///
   }
   for(int i = 0; i < img->width;i++){                                                                 //for x in img
     for(int j = 0; j < img->height;j++){                                                              //for y in img
-      ImageSetPixel(newImg, j, img->width-1-i, ImageGetPixel(img, i, j));          //newImg(x, y) = img( img_width-y, x), this rotates
+      ImageSetPixel(newImg, j, img->width-1-i, ImageGetPixel(img, i, j));        //newImg(x, y) = img( y, width-1-x), this rotates
     }                                                                                                 //the img anti-clockwise
   }
   return newImg;                                                                                      //returns the image
@@ -498,7 +498,7 @@ Image ImageMirror(Image img) { ///
   }
   for(int i = 0; i < img->width; i++){                                                //for x in img
     for(int j = 0; j < img ->height; j++){                                            //for y in img
-      ImageSetPixel(newImg, i, img->height-j, ImageGetPixel(img, img->width, img->height)); //newImg(x,y)=img(x, img->heigth)
+      ImageSetPixel(newImg, img->width-1-i, j, ImageGetPixel(img, i, j)); //newImg(x,y)=img(x, img->heigth)
     }
   }
   return newImg;
