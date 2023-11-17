@@ -413,7 +413,7 @@ void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
   for(int i = 0; i < img->width; i++){
     for(int j = 0; j < img->height; j++){
-      if(i < thr || j < thr){
+      if(ImageGetPixel(img, i, j) < thr){
         ImageSetPixel(img, i, j, 0);
       }
       else {
@@ -473,7 +473,7 @@ Image ImageRotate(Image img) { ///
     return NULL;
   }
   for(int i = 0; i < img->width;i++){                                                                 //for x in img
-    for(int j = 0; j < img->height;i++){                                                              //for y in img
+    for(int j = 0; j < img->height;j++){                                                              //for y in img
       ImageSetPixel(newImg, img->width-j, i, ImageGetPixel(img, i, j));          //newImg(x, y) = img( img_width-y, x), this rotates
     }                                                                                                 //the img anti-clockwise
   }
