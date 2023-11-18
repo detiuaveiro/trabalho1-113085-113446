@@ -632,6 +632,13 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
 void ImageBlur(Image img, int dx, int dy) {
   assert(img != NULL);
 
+  Image imageCopy = ImageCreate(img->width, img->height, 255);
+  for(int x = 0; x < img->width; x++) {
+    for(int y = 0; y < img->height; y++) {
+      ImageSetPixel(imageCopy, x, y, ImageGetPixel(img, x, y));
+      }
+    }
+
   for(int x = 0; x < img->width; x++) {
     for(int y = 0; y < img->height; y++) {  // For every pixel possible
       int numPixels = 0;
@@ -641,7 +648,7 @@ void ImageBlur(Image img, int dx, int dy) {
         for(int j = -dy; j <= dy; j++) {
           if(ImageValidPos(img, x + i, y + j)) {
             numPixels++;
-            count += ImageGetPixel(img, x + i, y + j);
+            count += ImageGetPixel(imageCopy, x + i, y + j);
           }
         }
       }
@@ -650,4 +657,5 @@ void ImageBlur(Image img, int dx, int dy) {
       ImageSetPixel(img, x, y, mean);
     }
   }
+  ImageDestroy(&imageCopy);
 }
