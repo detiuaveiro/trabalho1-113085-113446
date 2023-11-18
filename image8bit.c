@@ -631,10 +631,23 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) {
   assert(img != NULL);
-  int rectPixels = 2*dx * 2*dy;
-  for(int x = 0; x < img->width; x++){
-    for(int y = 0; y < img->height; y++){
 
+  for(int x = 0; x < img->width; x++) {
+    for(int y = 0; y < img->height; y++) {  // For every pixel possible
+      int numPixels = 0;
+      double count = 0;
+
+      for(int i = -dx; i <= dx; i++) {
+        for(int j = -dy; j <= dy; j++) {
+          if(ImageValidPos(img, x + i, y + j)) {
+            numPixels++;
+            count += ImageGetPixel(img, x + i, y + j);
+          }
+        }
+      }
+
+      double mean = count / numPixels;
+      ImageSetPixel(img, x, y, mean);
     }
   }
 }
