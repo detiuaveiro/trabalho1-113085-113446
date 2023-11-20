@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include "instrumentation.h"
 
 // The data structure
@@ -374,7 +373,7 @@ uint8 ImageGetPixel(Image img, int x, int y) { ///
   assert (img != NULL);
   assert (ImageValidPos(img, x, y));
   PIXMEM += 1;  // count one pixel access (read)
-  return img->pixel[G(img, x, y)];
+  return img->pixel[G(img, x, y)];  //return pixel level
 } 
 
 /// Set the pixel at position (x,y) to new level.
@@ -382,7 +381,7 @@ void ImageSetPixel(Image img, int x, int y, uint8 level) { ///
   assert (img != NULL);
   assert (ImageValidPos(img, x, y));
   PIXMEM += 1;  // count one pixel access (store)
-  img->pixel[G(img, x, y)] = level;
+  img->pixel[G(img, x, y)] = level;   //set pixel level
 } 
 
 
@@ -401,7 +400,7 @@ void ImageNegative(Image img) { ///
   assert (img != NULL);
   // Insert your code here!
   for(int i = 0; i < img->width;i++){
-    for(int j = 0; j < img->height;j++){       
+    for(int j = 0; j < img->height;j++){   //Iterates every possible pixel   
       ImageSetPixel(img, i, j, img->maxval-ImageGetPixel(img, i, j));   //img->pixel = img->maxval - img->pixel
     }
   }
@@ -413,7 +412,7 @@ void ImageNegative(Image img) { ///
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
   for(int i = 0; i < img->width; i++){
-    for(int j = 0; j < img->height; j++){          //Iterate through all possible pixels
+    for(int j = 0; j < img->height; j++){          //Iterate all possible pixels
       if(ImageGetPixel(img, i, j) < thr){         //if img->pixel < thr
         ImageSetPixel(img, i, j, 0);            //img->pixel = 0 (black)
       }
@@ -433,16 +432,13 @@ void ImageBrighten(Image img, double factor) {
   assert(factor >= 0.0);
 
   for (int i = 0; i < img->width; i++) {
-    for (int j = 0; j < img->height; j++) {
-      double level = ImageGetPixel(img, i, j) * factor;
+    for (int j = 0; j < img->height; j++) { //Iterates every pixel possible
+      double level = ImageGetPixel(img, i, j) * factor; //Multiplie the pixel by the factor and get the new pixel level
+      int roundedLevel = (int)(level + 0.5);  //Rounding to the nearest integer
 
-      // Arredondamento para o valor inteiro mais próximo
-      int roundedLevel = (int)(level + 0.5);
+      roundedLevel = (roundedLevel > img->maxval) ? img->maxval : roundedLevel; //Saturate the pixel if roundedLevel>maxvalue
 
-      // Saturar o valor ao máximo permitido
-      roundedLevel = (roundedLevel > img->maxval) ? img->maxval : roundedLevel;
-
-      ImageSetPixel(img, i, j, roundedLevel);
+      ImageSetPixel(img, i, j, roundedLevel);  //Set the pixel value to roundedLevel
     }
   }
 }
@@ -525,7 +521,7 @@ Image ImageCrop(Image img, int x, int y, int w, int h) { ///
   // Insert your code here!
   Image newImg = ImageCreate(w, h, 255);  //creates a new image
   for(int i = x; i < x + w; i++){
-    for(int j = y; j < y + h; j++){ //Iterates through all possible pixels
+    for(int j = y; j < y + h; j++){ //Iterates all possible pixels
       ImageSetPixel(newImg, i-x, j-y, ImageGetPixel(img, i, j));  //Sets all the pixels in the image
     }
   }
@@ -576,7 +572,6 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
         newPixel = img2->maxval;
       }
 
-      // C-style cast to uint8 before setting it in the image
       ImageSetPixel(img1, x + i, y + j, (uint8)(newPixel+0.5));
     }
   }
@@ -613,7 +608,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
     assert(img1 != NULL);
     assert(img2 != NULL);
-    for (int i = 0; i <= img1->width - img2->width; i++) {      // Iterate through all possible positions to find a match
+    for (int i = 0; i <= img1->width - img2->width; i++) {      // Iterate all possible positions to find a match
         for (int j = 0; j <= img1->height - img2->height; j++) {
             if (ImageMatchSubImage(img1, i, j, img2)) {    // Check if img2 matches the subimage of img1 at position (i, j)
                 // Set the position of the match
@@ -639,7 +634,7 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
 void ImageBlur(Image img, int dx, int dy) {
   assert(img != NULL);
 
-  Image imageCopy = ImageCreate(img->width, img->height, 255);
+  Image imageCopy = ImageCreate(img->width, img->height, 255);  //creates a copy of img
   for(int x = 0; x < img->width; x++) {
     for(int y = 0; y < img->height; y++) {
       ImageSetPixel(imageCopy, x, y, ImageGetPixel(img, x, y));
@@ -650,19 +645,19 @@ void ImageBlur(Image img, int dx, int dy) {
     for(int y = 0; y < img->height; y++) {  // For every pixel possible
       int numPixels = 0;
       double count = 0;
-
+ 
       for(int i = -dx; i <= dx; i++) {
-        for(int j = -dy; j <= dy; j++) {
-          if(ImageValidPos(img, x + i, y + j)) {
-            numPixels++;
-            count += ImageGetPixel(imageCopy, x + i, y + j);
+        for(int j = -dy; j <= dy; j++) {    //For the [x-dx, x+dx]x[y-dy, y+dy] rectangle starting in (x,y)
+          if(ImageValidPos(img, x + i, y + j)) {  //If the pixel of the rectangle isnt out of the image
+            numPixels++;  //numPixels+=1
+            count += ImageGetPixel(imageCopy, x + i, y + j);  //count+= pixel level
           }
         }
       }
 
-      double mean = count / numPixels;
+      double mean = count / numPixels;  
       ImageSetPixel(img, x, y, mean+0.5);
     }
   }
-  ImageDestroy(&imageCopy);
+  ImageDestroy(&imageCopy); //Deletes the copy of img
 }
