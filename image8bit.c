@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "instrumentation.h"
 
 // The data structure
@@ -559,24 +560,28 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
 void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
-  assert (ImageValidRect(img1, x, y, img2->width, img2->height)); //checks if img2 fits into img1
-  // Insert your code here!
-  if(alpha > 1.0){
-    alpha = 1.0;  //saturates alpha
+  assert (ImageValidRect(img1, x, y, img2->width, img2->height));
+
+  if (alpha > 1.0) {
+    alpha = 1.0;  // saturates alpha
   }
-  if(alpha < 0.0){
-    alpha = 0.0;  //saturates alpha
+  if (alpha < 0.0) {
+    alpha = 0.0;  // saturates alpha
   }
-  for(int i = 0; i < img2->width; i++){
-    for(int j = 0; j < img2->height; j++){  //Iterates every pixel
-      int newPixel = ImageGetPixel(img2, i, j)*(alpha) + ImageGetPixel(img1, i+x, j+y)*(1-alpha);
-      if(newPixel > img2->maxval){
+
+  for (int i = 0; i < img2->width; i++) {
+    for (int j = 0; j < img2->height; j++) {  // Iterates every pixel
+      double newPixel = ImageGetPixel(img2, i, j) * alpha + ImageGetPixel(img1, i + x, j + y) * (1 - alpha);
+      if (newPixel > img2->maxval) {
         newPixel = img2->maxval;
       }
-      ImageSetPixel(img1, x + i, y+j, newPixel);
+
+      // C-style cast to uint8 before setting it in the image
+      ImageSetPixel(img1, x + i, y + j, (uint8)(newPixel+0.5));
     }
   }
 }
+
 
 /// Compare an image to a subimage of a larger image.
 /// Returns 1 (true) if img2 matches subimage of img1 at pos (x, y).
@@ -656,7 +661,7 @@ void ImageBlur(Image img, int dx, int dy) {
       }
 
       double mean = count / numPixels;
-      ImageSetPixel(img, x, y, mean);
+      ImageSetPixel(img, x, y, mean+0.5);
     }
   }
   ImageDestroy(&imageCopy);
