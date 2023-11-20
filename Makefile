@@ -9,7 +9,7 @@ CFLAGS = -Wall -O2 -g
 
 PROGS = imageTool imageTest
 
-TESTS = test1 test2 test3 test4 test5 test6 test7 test8 test9
+TESTS = test1 test2 test3 test4 test5 test6 test7 test8 test9 test10
 
 # Default rule: make all programs
 all: $(PROGS)
