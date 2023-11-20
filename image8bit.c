@@ -427,19 +427,21 @@ void ImageThreshold(Image img, uint8 thr) { ///
 /// Multiply each pixel level by a factor, but saturate at maxval.
 /// This will brighten the image if factor>1.0 and
 /// darken the image if factor<1.0.
-void ImageBrighten(Image img, double factor) { ///
-  assert (img != NULL);
-  // ? assert (factor >= 0.0);
+void ImageBrighten(Image img, double factor) {
+  assert(img != NULL);
   assert(factor >= 0.0);
-  // Insert your code here!
-  double level = 0;
-  for(int i = 0; i < img->width;i++){
-    for(int j = 0; j < img->height; j++){ //Iterate through all posible pixels
-      level = ImageGetPixel(img, i, j) * factor; //level = img->pixel * factor
-      if(level > img->maxval){
-        level = img->maxval; //saturate at maxval                
-      }
-      ImageSetPixel(img, i, j, level); //img->pixel = level
+
+  for (int i = 0; i < img->width; i++) {
+    for (int j = 0; j < img->height; j++) {
+      double level = ImageGetPixel(img, i, j) * factor;
+
+      // Arredondamento para o valor inteiro mais próximo
+      int roundedLevel = (int)(level + 0.5);
+
+      // Saturar o valor ao máximo permitido
+      roundedLevel = (roundedLevel > img->maxval) ? img->maxval : roundedLevel;
+
+      ImageSetPixel(img, i, j, roundedLevel);
     }
   }
 }
