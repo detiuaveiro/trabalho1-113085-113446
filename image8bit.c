@@ -608,9 +608,12 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
     assert(img1 != NULL);
     assert(img2 != NULL);
-    for (int i = 0; i <= img1->width - img2->width; i++) {      // Iterate all possible positions to find a match
+    int numComparisons = 0; // Initialize the variable to count comparisons
+
+    for (int i = 0; i <= img1->width - img2->width; i++) {
         for (int j = 0; j <= img1->height - img2->height; j++) {
-            if (ImageMatchSubImage(img1, i, j, img2)) {    // Check if img2 matches the subimage of img1 at position (i, j)
+            numComparisons++; // Increment the counter for each comparison
+            if (ImageMatchSubImage(img1, i, j, img2)) {
                 // Set the position of the match
                 if (px != NULL) {
                     *px = i;
@@ -618,12 +621,15 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
                 if (py != NULL) {
                     *py = j;
                 }
-                return 1; //subimage located
+                printf("Number of comparisons made: %d\n", numComparisons); // Print the number of comparisons
+                return 1; // Subimage located
             }
         }
     }
+    printf("Number of comparisons made: %d\n", numComparisons); // Print the number of comparisons
     return 0; // No subimage located
 }
+
 
 /// Filtering
 
@@ -634,12 +640,15 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
 void ImageBlur(Image img, int dx, int dy) {
   assert(img != NULL);
 
+  int totalOperations = 0; // Counter for total operations
+
   Image imageCopy = ImageCreate(img->width, img->height, 255);  //creates a copy of img
   for(int x = 0; x < img->width; x++) {
     for(int y = 0; y < img->height; y++) {
       ImageSetPixel(imageCopy, x, y, ImageGetPixel(img, x, y));
-      }
+      totalOperations++; // Increment for each pixel copied
     }
+  }
 
   for(int x = 0; x < img->width; x++) {
     for(int y = 0; y < img->height; y++) {  // For every pixel possible
@@ -648,16 +657,21 @@ void ImageBlur(Image img, int dx, int dy) {
  
       for(int i = -dx; i <= dx; i++) {
         for(int j = -dy; j <= dy; j++) {    //For the [x-dx, x+dx]x[y-dy, y+dy] rectangle starting in (x,y)
-          if(ImageValidPos(img, x + i, y + j)) {  //If the pixel of the rectangle isnt out of the image
+          if(ImageValidPos(img, x + i, y + j)) {  //If the pixel of the rectangle isn't out of the image
             numPixels++;  //numPixels+=1
             count += ImageGetPixel(imageCopy, x + i, y + j);  //count+= pixel level
+            totalOperations++; // Increment for each valid pixel accessed
           }
         }
       }
 
       double mean = count / numPixels;  
       ImageSetPixel(img, x, y, mean+0.5);
+      totalOperations++; // Increment for setting pixel value
     }
   }
+  
   ImageDestroy(&imageCopy); //Deletes the copy of img
+
+  printf("Total number of operations: %d\n", totalOperations); // Print total operations
 }
