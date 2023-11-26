@@ -581,24 +581,19 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
 /// Compare an image to a subimage of a larger image.
 /// Returns 1 (true) if img2 matches subimage of img1 at pos (x, y).
 /// Returns 0, otherwise.
-int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
-  assert (img1 != NULL);
-  assert (img2 != NULL);
-  assert (ImageValidPos(img1, x, y));
-  // Insert your code here!
-    for (int i = 0; i < img2->width; i++) {                 //Compare the images
-        for (int j = 0; j < img2->height; j++) {
-            int x_img1 = x + i;
-            int y_img1 = y + j;
-            if (x_img1 >= img1->width || y_img1 >= img1->height) {      //Checks if the pixel exists
-                return 0;
-            }
-            if (img1->pixel[y_img1 * img1->width + x_img1] != img2->pixel[j * img2->width + i]) {     //Compare pixels
-                return 0; //If pixels are different, return 0
+int ImageMatchSubImage(Image img1, int x, int y, Image img2) {
+    assert(img1 != NULL);
+    assert(img2 != NULL);
+    assert(ImageValidPos(img1, x, y));
+
+    for (int i = 0; i < img2->width; i++) {
+        for (int j = 0; j < img2->height; j++) {  //Iterates through all pixels
+            if (img1->pixel[(j + y) * img1->width + (i + x)] != img2->pixel[j * img2->width + i]) {
+                return 0; // If pixels are different, return 0
             }
         }
     }
-    return 1; //If all pixels match, return 1
+    return 1; // If all pixels match, return 1
 }
 
 /// Locate a subimage inside another image.
