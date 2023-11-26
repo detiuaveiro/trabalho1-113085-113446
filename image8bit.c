@@ -148,11 +148,15 @@ void ImageInit(void) { ///
   InstrCalibrate();
   InstrName[0] = "pixmem";  // InstrCount[0] will count pixel array acesses
   // Name other counters here...
-  
+  InstrName[1] = "cicles";
+  InstrName[2] = "operations";
 }
 
 // Macros to simplify accessing instrumentation counters:
 #define PIXMEM InstrCount[0]
+#define CICLES InstrCount[1]
+#define OPERATIONS InstrCount[2]
+
 // Add more macros here...
 
 // TIP: Search for PIXMEM or InstrCount to see where it is incremented!
@@ -577,7 +581,6 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
   }
 }
 
-int comparacoesSubImage = 0;
 /// Compare an image to a subimage of a larger image.
 /// Returns 1 (true) if img2 matches subimage of img1 at pos (x, y).
 /// Returns 0, otherwise.
@@ -588,7 +591,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) {
 
     for (int i = 0; i < img2->width; i++) {
         for (int j = 0; j < img2->height; j++) {  //Iterates through all pixels
-            comparacoesSubImage++;
+            CICLES++; // Increment the counter for each cicle
             if (img1->pixel[(j + y) * img1->width + (i + x)] != img2->pixel[j * img2->width + i]) {
                 return 0; // If pixels are different, return 0
             }
@@ -604,11 +607,9 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) {
 int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
     assert(img1 != NULL);
     assert(img2 != NULL);
-    int numComparisons = 0; // Initialize the variable to count comparisons
 
     for (int i = 0; i <= img1->width - img2->width; i++) {
         for (int j = 0; j <= img1->height - img2->height; j++) {
-            numComparisons++; // Increment the counter for each comparison
             if (ImageMatchSubImage(img1, i, j, img2)) {
                 // Set the position of the match
                 if (px != NULL) {
@@ -617,14 +618,10 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
                 if (py != NULL) {
                     *py = j;
                 }
-                printf("Number of comparisons made: %d\n", numComparisons); // Print the number of comparisons
-                printf("Number of comparisons made with ImageMatchSubImage: %d\n", comparacoesSubImage); // Print the number of comparisons
                 return 1; // Subimage located
             }
         }
     }
-    printf("Number of comparisons made: %d\n", numComparisons); // Print the number of comparisons
-    printf("Number of comparisons made with ImageMatchSubImage: %d\n", comparacoesSubImage); // Print the number of comparisons
     return 0; // No subimage located
 }
 
@@ -638,13 +635,11 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) {
 void ImageBlur(Image img, int dx, int dy) {
   assert(img != NULL);
 
-  int totalOperations = 0; // Counter for total operations
-
   Image imageCopy = ImageCreate(img->width, img->height, 255);  //creates a copy of img
   for(int x = 0; x < img->width; x++) {
     for(int y = 0; y < img->height; y++) {
       ImageSetPixel(imageCopy, x, y, ImageGetPixel(img, x, y));
-      totalOperations++; // Increment for each pixel copied
+      OPERATIONS++; // Increment for each pixel copied
     }
   }
 
@@ -658,18 +653,17 @@ void ImageBlur(Image img, int dx, int dy) {
           if(ImageValidPos(img, x + i, y + j)) {  //If the pixel of the rectangle isn't out of the image
             numPixels++;  //numPixels+=1
             count += ImageGetPixel(imageCopy, x + i, y + j);  //count+= pixel level
-            totalOperations++; // Increment for each valid pixel accessed
+            OPERATIONS++; // Increment for each valid pixel accessed
           }
         }
       }
 
       double mean = count / numPixels;  
       ImageSetPixel(img, x, y, mean+0.5);
-      totalOperations++; // Increment for setting pixel value
+      OPERATIONS++; // Increment for setting pixel value
     }
   }
   
   ImageDestroy(&imageCopy); //Deletes the copy of img
 
-  printf("Total number of operations: %d\n", totalOperations); // Print total operations
 }

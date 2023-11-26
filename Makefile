@@ -322,6 +322,7 @@ test92: $(PROGS) setup
 	./imageTool tic test/small.pgm test/original.pgm locate toc
 test93: $(PROGS) setup
 	./imageTool tic test/small.pgm test/small.pgm locate toc
+	
 test1: $(PROGS) setup
 	./imageTool test/original.pgm neg save neg.pgm
 	cmp neg.pgm test/neg.pgm
