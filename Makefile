@@ -48,30 +48,30 @@ test/:
 	@#curl -s -o test/aed-trab1-test.zip https://sweet.ua.pt/mario.antunes/aed/test/aed-trab1-test.zip
 	@#unzip -q -o test/aed-trab1-test.zip -d test/
 
-test1: $(PROGS) setup
+test94: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 1,1 save blur.pgm toc
 
-test2: $(PROGS) setup
+test95: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 2,2 save blur.pgm toc
-test3: $(PROGS) setup
+test96: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 3,3 save blur.pgm toc
 
-test4: $(PROGS) setup
+test97: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 4,4 save blur.pgm toc
 
-test5: $(PROGS) setup
+test98: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 5,5 save blur.pgm toc
 
-test6: $(PROGS) setup
+test99: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 6,6 save blur.pgm toc
 
-test7: $(PROGS) setup
+test100: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 7,7 save blur.pgm toc
 
-test8: $(PROGS) setup
+test101: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 8,8 save blur.pgm toc
 
-test9: $(PROGS) setup
+test102: $(PROGS) setup
 	./imageTool pgm/large/ireland-06-1200x1600.pgm tic blur 9,9 save blur.pgm toc
 	
 test10: $(PROGS) setup
@@ -322,39 +322,39 @@ test92: $(PROGS) setup
 	./imageTool tic test/small.pgm test/original.pgm locate toc
 test93: $(PROGS) setup
 	./imageTool tic test/small.pgm test/small.pgm locate toc
-test94: $(PROGS) setup
+test1: $(PROGS) setup
 	./imageTool test/original.pgm neg save neg.pgm
 	cmp neg.pgm test/neg.pgm
 
-test95: $(PROGS) setup
+test2: $(PROGS) setup
 	./imageTool test/original.pgm thr 128 save thr.pgm
 	cmp thr.pgm test/thr.pgm
 
-test96: $(PROGS) setup
+test3: $(PROGS) setup
 	./imageTool test/original.pgm bri .33 save bri.pgm
 	cmp bri.pgm test/bri.pgm
 
-test97: $(PROGS) setup
+test4: $(PROGS) setup
 	./imageTool test/original.pgm rotate save rotate.pgm
 	cmp rotate.pgm test/rotate.pgm
 
-test98: $(PROGS) setup
+test5: $(PROGS) setup
 	./imageTool test/original.pgm mirror save mirror.pgm
 	cmp mirror.pgm test/mirror.pgm
 
-test99: $(PROGS) setup
+test6: $(PROGS) setup
 	./imageTool test/original.pgm crop 100,100,100,100 save crop.pgm
 	cmp crop.pgm test/crop.pgm
 
-test100: $(PROGS) setup
+test7: $(PROGS) setup
 	./imageTool test/small.pgm test/original.pgm paste 100,100 save paste.pgm
 	cmp paste.pgm test/paste.pgm
 
-test101: $(PROGS) setup
+test8: $(PROGS) setup
 	./imageTool test/small.pgm test/original.pgm blend 100,100,.33 save blend.pgm
 	cmp blend.pgm test/blend.pgm
 
-test102: $(PROGS) setup
+test9: $(PROGS) setup
 	./imageTool test/original.pgm blur 7,7 save blur.pgm
 	cmp blur.pgm test/blur.pgm
 
